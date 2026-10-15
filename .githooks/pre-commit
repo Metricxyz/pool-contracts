@@ -1,0 +1,36 @@
+#!/bin/sh
+# Runs before each commit: Prettier (non-Solidity), forge fmt --check, forge test.
+# Requires: npm install (once) for Prettier; Foundry on PATH.
+# Enable: npm install  (sets git config --local core.hooksPath .githooks)
+#         or: git config --local core.hooksPath .githooks
+# Skip: git commit --no-verify
+
+set -eu
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT" || exit 1
+
+if ! command -v npm >/dev/null 2>&1; then
+  echo "pre-commit: npm not found; install Node.js or use --no-verify." >&2
+  exit 1
+fi
+if [ ! -d node_modules/prettier ]; then
+  echo "pre-commit: run npm install (Prettier missing under node_modules)." >&2
+  exit 1
+fi
+if ! command -v forge >/dev/null 2>&1; then
+  echo "pre-commit: forge not found on PATH; install Foundry or use --no-verify." >&2
+  exit 1
+fi
+
+echo "pre-commit: Prettier check (non-Solidity)..."
+npm run format:prettier:check
+
+echo "pre-commit: Solidity format check (forge fmt --check)..."
+if ! forge fmt --check; then
+  echo "pre-commit: forge fmt --check failed. Run: forge fmt" >&2
+  exit 1
+fi
+
+echo "pre-commit: forge test..."
+forge test

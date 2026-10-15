@@ -1,0 +1,51 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    name: Forge Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Check Prettier (non-Solidity)
+        run: npm run format:prettier:check
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          # Pin so `forge fmt --check` matches local installs (fmt output varies by release).
+          version: 1.7.1
+
+      - name: Check Solidity formatting
+        run: forge fmt --check
+
+      - name: Build
+        run: forge build
+
+      # MetricOmmPoolDeployer's runtime bytecode is MetricOmmPool's creation code, so it sits closest to the
+      # EIP-170 24,576-byte limit. `forge build` alone does not fail on an oversized contract; --sizes does.
+      # Scope to `contracts/` so test harnesses/mocks are not held to deployment size limits.
+      - name: Check contract sizes (EIP-170)
+        run: forge build --sizes contracts
+
+      - name: Run tests
+        run: forge test -vvv
