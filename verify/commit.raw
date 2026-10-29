@@ -1,0 +1,16 @@
+tree 43fb90d5a7df2fa7d83112120846b114eff68d4d
+parent 72f9eeb56d09f1cfd842caec12eb2a59be05f212
+author Nradko <konrad.wierzbik@gmail.com> 1780500730 +0200
+committer konrad-metric <konrad@metric.xyz> 1780501034 +0200
+
+Add action-scoped pool reentrancy guard, inSwap view, and factory isPool check.
+
+Important changes:
+   - MetricReentrancyGuardTransient - transient lock stores per-function action id; revert when any guarded action is active
+   - PoolActions - keccak256 action ids for addLiquidity, removeLiquidity, swap, simulateSwapAndRevert, and factory fee mutators
+   - MetricOmmPool - swap to Metric guard; inSwap returns resolved price provider during live swap only
+   - IMetricOmmPoolFactory isPool - view true when poolToIdx is non-zero for a registered deployment
+   - tests - inSwap callback and nested-swap revert coverage; factory isPool registry test
+
+Small changes:
+    - simulateSwapAndRevert guarded and clears lock before SimulateSwap revert; PoolActions on all prior nonReentrant entrypoints; InSwapProbeCaller mock for swap callback probes
