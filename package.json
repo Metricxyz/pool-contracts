@@ -1,0 +1,30 @@
+{
+  "name": "@metric/core",
+  "version": "2.0.0",
+  "description": "Core smart contracts of Metric OMM",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Metric-OMM/metric-core.git"
+  },
+  "license": "UNLICENSED",
+  "keywords": [
+    "metric",
+    "omm",
+    "core"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "format:prettier": "prettier --write . --ignore-path .prettierignore",
+    "format:prettier:check": "prettier --check . --ignore-path .prettierignore",
+    "format:forge": "forge fmt",
+    "format:forge:check": "forge fmt --check",
+    "format:check": "npm run format:prettier:check && npm run format:forge:check",
+    "format": "npm run format:prettier && npm run format:forge",
+    "prepare": "node scripts/enable-git-hooks.cjs"
+  },
+  "devDependencies": {
+    "prettier": "^3.0.0"
+  }
+}

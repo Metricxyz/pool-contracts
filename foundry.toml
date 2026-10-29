@@ -1,0 +1,29 @@
+[profile.default]
+src = "contracts"
+out = "out"
+libs = ["lib"]
+solc = "0.8.35"
+evm_version = "cancun"
+via_ir = true
+optimizer = true
+# Deployment-facing contracts: favor runtime gas over bytecode size (but fit in bytecode size limits).
+optimizer_runs = 1000
+bytecode_hash = "none"
+
+# forge-std cheatcodes use `error` as an identifier (solc 6335).
+ignored_error_codes = [6335]
+
+[profile.default.fuzz]
+runs = 1000
+seed = "0x4444"
+
+[profile.pr.fuzz]
+runs = 10000
+
+[profile.ci.fuzz]
+runs = 100000
+
+[fmt]
+tab_width = 2
+
+# See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options

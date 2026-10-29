@@ -1,0 +1,9 @@
+tree e33d7a523d6f800ce99cfc3d5fe34fe5ad1f608b
+parent c86140ca5caa6deccd29d3025bdf6839e4d7a727
+author Nradko <konrad.wierzbik@gmail.com> 1782913479 +0200
+committer konrad-metric <konrad@metric.xyz> 1782921490 +0200
+
+Fix exact-out notional fee overcharge on gross swap input.
+- SwapMath SwapState - track feeExclusiveInputScaled during exact-output bin steps
+- MetricOmmPool executeSwap - charge notional on pre-bin-fee input instead of gross input
+- MetricOmmPool notional fee tests - update exact-out expectations and add oracle spread regression
