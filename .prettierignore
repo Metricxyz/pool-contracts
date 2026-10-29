@@ -1,0 +1,10 @@
+.prettierrc
+.claude/
+foundry.toml
+out/
+lib/
+cache/
+node_modules/
+contracts/
+test/
+*.sol

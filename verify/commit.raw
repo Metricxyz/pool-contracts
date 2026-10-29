@@ -1,0 +1,27 @@
+tree a95f1d09ff47f3511eb9f80a24f854e4b1c153d4
+parent 71a3098bb87731fd94213ac806694bf207d0db69
+author konrad-metric <konrad@metric.xyz> 1789404600 +0200
+committer GitHub <noreply@github.com> 1789404600 +0200
+gpgsig -----BEGIN PGP SIGNATURE-----
+ 
+ wsFcBAABCAAQBQJqqCW4CRC1aQ7uu5UhlAAALw4QACzyU0Ddt1fuZD0BAEPGPNaE
+ x9CnQ0oMp153dVEu7OKP4gVFowj64aFXhdvOASaj/UASO5Nqg9Wsx6W+VtT55wr/
+ Hk9Ar/W9egsh/yJZtDDjlu5D2TILoLPNc4SkS5qHfjoz4gXnZ+ZhLSGemln5X+KL
+ VLuM5gOEZkgYyyc9WDU7fqx9WCCoEryTVglhUBQAeSElp4LdiNZUwKPlt7/82ur2
+ ugB8G45LFNfE+gtkAjD8CyEM+2e6VLJ7fUrhS35aJkjYQeCNAh9yLScH31D5nTww
+ /spHXVV9dinyo5uInuvFxhYPfimo5JJYuidTdAYKHme22QppIg1nnaMQffdMKGRm
+ EwkfYzUbJ2MPTRB7sFDRbwbxt3Nwudfa1Rs026TcWkWbzlbH04tTlogtmFDpKBC9
+ d9sotwOgvcI2bVt6qq0HVqEorD8083ddyBRUon8xk4w0uuOvbYu3tRyS2RMPyi+o
+ wLxCT1Z1fGRDtrkqP9vCGHA+Nky9CkaRO9SprEn1RNygRfR7qDjfjv4Kvu9Vg2YE
+ HFvFpjiY+XzigCs0yvoeSNO5hbPgLxPAFUmnLZJCh8CZv+ulrcL0P54vGOjqt61V
+ prxNyVl7fZmXlXYIte3bTZ3M/B+pvVWOc+cpKgkY534GUNpRj8yavZ3LdkBx5EHU
+ 9uAC7p5IbrlFL5F4t/Q1
+ =sQxN
+ -----END PGP SIGNATURE-----
+ 
+
+Preserve accrued fee splits with pending payout balances (#87)
+
+- Allocate fees to scaled admin/protocol balances before attempting transfers; retain failed payouts for retry.
+  - Use trySafeTransfer in the pool and propagate accounting errors directly through the factory.
+  - Add a pending-fee reader and separate collection tests from swap fee-accrual tests using a storage-write harness.
