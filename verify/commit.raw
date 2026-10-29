@@ -1,0 +1,30 @@
+tree d93d081406eb2f1fcb7769269cc16512da291616
+parent 34376250661553240ed43f8908dbdcb11e13e8df
+author konrad-metric <konrad@metric.xyz> 1789489273 +0200
+committer GitHub <noreply@github.com> 1789489273 +0200
+gpgsig -----BEGIN PGP SIGNATURE-----
+ 
+ wsFcBAABCAAQBQJqqXB5CRC1aQ7uu5UhlAAAYUsQAHDq9pRpvmqHTeY4Eg7oCMUZ
+ +MFNvrUOgDGR/EZBWrfJYbnXHc8VgJanqYxXXj21fLoxbQnubiGRw6VAxTYLjev8
+ aihs1iqKcEKQKL2wkjp7VLyeCGGpIKyEyj+6jQGYirotR6L8jo62LGB9SDGwwIql
+ wk9kGb6MD3Eoj5CjzbLrThN4TU2Wa6ZJKiRdjwCvEv3IP9jEjvenfeaydPgXW9tT
+ MaNpJ7VCtHzijuzWL+YC6IYEnkv7Bf/jtuXuLVIx75b4cAFRQt0tty0lfFlnV6/v
+ xG6sZn6S0dc02Hn06/3VLP1nvNrHcfRkT+0Z9Sdhd4m2WPCBPRYc1sAeUPl0Sj6e
+ XFGMYmmlDV5+WyYV0Ie3eqevOsLPAIa+HDizs80zLw5DOs7XFoU2kOFRhJIBbtjT
+ KTJ2PZ4T7uNI+d4K6kzWMgOvlUqwjaPYuMopx6vsDIU6JlKVtvOa1nPTZVStSefT
+ kJVNngr2+iUsuiMVq2qHxuCT4hKn6k6jSh0DY0b0+13wypgv57VuWP9fK2KIQW+O
+ NXEaZu2eOsCwYcEJqvNG0D2f1T9sR+2uQ90kbfz7VBu5RhLhJV0QBZjCNMft2EDg
+ dA1jXypUevP/z5HK43g/KARjsJF94jA2Kda0HPSs0yxM4KOjUQRMB85pu+uzMuA6
+ jgBM0e9n4QYTBN13NqwH
+ =EQWk
+ -----END PGP SIGNATURE-----
+ 
+
+Fix precision loss in bid/ask/ref asymmetry check, bump optimizer_runs (#88)
+
+Replace the rounded-ratio-and-reciprocal check in
+_validateBidAskReferencePriceX64 with an exact cross-multiplication
+comparison, avoiding false BidAskRefAsymmetryOutOfBounds reverts on
+valid quotes near the asymmetry boundary. Bump optimizer_runs to 1999
+(from 1933), the highest value that still fits MetricOmmPoolDeployer
+under the EIP-170 size limit.
