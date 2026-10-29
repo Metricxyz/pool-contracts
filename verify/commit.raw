@@ -1,0 +1,18 @@
+tree bec28ec53bb23e6f9daaae54fc0623e4437f9975
+parent 72c65defe75d97f781596ee3fd74ce7c1f6fd729
+author Nradko <konrad.wierzbik@gmail.com> 1781707630 +0200
+committer konrad-metric <konrad@metric.xyz> 1781708634 +0200
+
+Add pool getSellAndBuyPrices and align price provider token accessors.
+(This is modified: https://github.com/Metric-OMM/metric-core/pull/55/changes )
+
+Important changes:
+   - getSellAndBuyPrices - fee-adjusted live sell/buy Q64.64 quotes at current bin position with oracle spread, per-bin fees, and notional fee matching exact-in swap
+   - IMetricOmmPool - expose getSellAndBuyPrices on pool interface
+   - IPriceProvider - replace getTokens with separate token0 and token1 accessors
+   - MetricOmmPoolFactory - validate price provider pair via token0 and token1
+   - getSellAndBuyPrices tests - quote vs realized swap coverage including notional fee
+   - anchor E2E tests - faithful anchored oracle/provider path through pool swap and getSellAndBuyPrices
+
+Small changes:
+    - add FaithfulAnchor test mocks; update MockPriceProvider, MockOracle, SwapInBin, and SwapMathBenchmark mocks for token0/token1; refresh factory validation comment
