@@ -1,0 +1,22 @@
+tree c4393dbd4300201b8c51b7cf9389016c286a7c0c
+parent a6e3c74787ffecac90963c6bc5d421138640e602
+author Nradko <konrad.wierzbik@gmail.com> 1781554320 +0200
+committer konrad-metric <konrad@metric.xyz> 1781554614 +0200
+
+Address Sherlocks finding.
+
+Important changes:
+   - #102 InvalidHooksConfig unused factory error - removed dead InvalidExtensionsConfig from IMetricOmmPoolFactory; extension validation reverts via ValidateExtensionsConfig library only
+   - #97 and #86 admin not bound to CREATE2 address - pass admin and adminFeeDestination through DeployParams and pool constructor init code so CREATE2 address reflects intended admin; authority remains factory poolAdmin mapping
+   - #95 WrongBinArrays unreachable revert - removed dead posBinCount == 0 check and WrongBinArrays error from factory interface
+   - #94 protocol unpause cannot reach level 0 - documented intentional 2 to 1 design in IMetricOmmPoolFactoryOwner NatSpec and pool configuration docs; pool admin must call unpausePool for full resume
+   - #93 collectPoolFees permissionless but owner-only interface - moved collectPoolFees to IMetricOmmPoolFactory with permissionless NatSpec; removed from owner interface and updated docs
+   - #92 setPoolProtocolFee silent admin clamp - emit PoolAdminSpreadFeeUpdated and PoolAdminNotionalFeeUpdated when admin fee components are clamped to caps
+   - #91 and #87 redundant deploy fee validation - removed weaker _validateDeployFeeRates sum check; per-component caps in _validatePoolParameters remain sole guard
+   - #90 lowering fee caps blocks pool creation - setFeeCaps auto-clamps spreadProtocolFeeE6 and protocolNotionalFeeE8 to new caps with default-fee update events
+   - #89 constructor missing fee init events - factory constructor now emits FeeCapsUpdated, SpreadProtocolFeeDefaultUpdated, and ProtocolNotionalFeeDefaultUpdated
+   - #88 redundant SwapMath else branch - removed unreachable linear fallback in computeAnalyticalTargetPosForBuyToken0 when deltaPriceX64 == 0; lowerPriceX64 < upperPriceX64 makes ΔP > 0 always
+   - pool deploy fee args - factory sums protocol and admin components and passes total spreadFeeE6 and notionalFeeE8 to deployer and pool constructor; factory poolFeeConfig still stores per-component splits fo collectFees
+
+Small changes:
+    - README extensions wording tweak; base tests deploy pools via MetricOmmPoolDeployer with lazy deployer init; deployer, harness, and SwapInBin test constructor updates for admin arg and total fees
