@@ -45,8 +45,8 @@ Pools use external price providers for bid/ask, maintain liquidity in configurab
 ## Installation
 
 ```bash
-git clone --recursive https://github.com/Metricxyz/metric-core.git
-cd metric-core
+git clone --recursive https://github.com/Metricxyz/pool-contracts.git
+cd pool-contracts
 forge build
 ```
 
@@ -113,7 +113,7 @@ The hook runs **`npm run format:prettier:check`**, **`forge fmt --check`** (fail
 
 - **[Pool configuration and management](docs/POOL_CONFIGURATION_AND_MANAGEMENT.md)** — `createPool` / constructor parameters, bins, admin vs protocol roles.
 - **[Swap math](docs/SwapMath.md)** — In-bin pricing, specified-in / specified-out derivations, fee sizing, and balance limits.
-- **Periphery** — Routers, quoters, lenses and product extensions live in [metric-periphery](https://github.com/Metricxyz/metric-periphery).
+- **Periphery** — Routers, quoters, lenses and product extensions live in [periphery-contracts](https://github.com/Metricxyz/periphery-contracts).
 
 ## Project structure
 
@@ -143,6 +143,37 @@ test/mocks/            # Test doubles (e.g. MockERC20, MockOracle, TestCaller)
 ## Security and audits
 
 Audit reports and instructions for reporting vulnerabilities are published at [docs.metric.xyz — Security and audits](https://docs.metric.xyz/reference/security-and-audits).
+
+### Audited code
+
+Every commit named in the audit reports is published here as a tag named `audit-<commit>`. A tag is a new commit without the private history, so its own hash differs from the audited one. Its `contracts/` folder, though, is identical to the audited commit's, and the tag's `VERIFY.md` proves that from the commit hash printed in the report, without access to the private repository.
+
+| Tag                                                                               | Audits                                                                                               | `contracts/` hash                          | Proof                                                                                 |
+| --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------- |
+| [`audit-6aa6c3b`](https://github.com/Metricxyz/pool-contracts/tree/audit-6aa6c3b) | Zellic audit (Jun 2026), audited. Sherlock collaborative audit (May–Jun 2026), audited               | `2f9590d9f9929afeec08e21840bc42dc2abc31cc` | [VERIFY.md](https://github.com/Metricxyz/pool-contracts/blob/audit-6aa6c3b/VERIFY.md) |
+| [`audit-7b9ab56`](https://github.com/Metricxyz/pool-contracts/tree/audit-7b9ab56) | Sherlock collaborative audit, fixes. Sherlock bug bounty contest (Jul 2026), audited                 | `b8b61255c99811f2bbd81d0e3d588446cc01c7b4` | [VERIFY.md](https://github.com/Metricxyz/pool-contracts/blob/audit-7b9ab56/VERIFY.md) |
+| [`audit-4410fec`](https://github.com/Metricxyz/pool-contracts/tree/audit-4410fec) | Sherlock bug bounty contest, fixes. Zellic re-audit (Sep 2026), final                                | `3c289ab9536fb1296fecb72d9ae43b10b0a67f92` | [VERIFY.md](https://github.com/Metricxyz/pool-contracts/blob/audit-4410fec/VERIFY.md) |
+| [`audit-33d0a34`](https://github.com/Metricxyz/pool-contracts/tree/audit-33d0a34) | Zellic re-audit (Sep 2026), starting point: the re-audit reviewed the changes from here to `4410fec` | `6f035fef61d3e6a154206c152a94f45a5bee4cbe` | [VERIFY.md](https://github.com/Metricxyz/pool-contracts/blob/audit-33d0a34/VERIFY.md) |
+
+Two more tags hold the versions of this code that [periphery-contracts](https://github.com/Metricxyz/periphery-contracts) uses as its `lib/metric-core` dependency in its audited commits: [`audit-72c65de`](https://github.com/Metricxyz/pool-contracts/tree/audit-72c65de) (`contracts/` `30585c3ce8632be5e8be64b66853c945234b22e1`, [VERIFY.md](https://github.com/Metricxyz/pool-contracts/blob/audit-72c65de/VERIFY.md)) and [`audit-d4d0e2a`](https://github.com/Metricxyz/pool-contracts/tree/audit-d4d0e2a) (`contracts/` `77ccd4f0bbc452ed47f3aa6394e23b90037c241a`, [VERIFY.md](https://github.com/Metricxyz/pool-contracts/blob/audit-d4d0e2a/VERIFY.md)).
+
+To verify a tag, clone it and run its check script (Python 3 and git only):
+
+```bash
+git clone --branch audit-4410fec https://github.com/Metricxyz/pool-contracts.git
+cd pool-contracts
+python verify/verify.py .
+```
+
+It ends with `OK: contracts/ at this tag is identical to contracts/ in audited commit …`. Each tag's `VERIFY.md` explains the check step by step. For a quick look, compare the hash directly:
+
+```bash
+git rev-parse audit-4410fec:contracts   # 3c289ab9536fb1296fecb72d9ae43b10b0a67f92
+```
+
+### Changes since the last audit
+
+Since `4410fec` there is one logic change: [`d4d0e2a`](https://github.com/Metricxyz/pool-contracts/tree/audit-d4d0e2a) fixes precision loss in the bid/ask/reference asymmetry check and raises the optimizer runs setting. That version is the `lib/metric-core` dependency of the periphery code Sherlock reviewed in September 2026. Every other change is to NatSpec, documentation or formatting.
 
 ## License
 
